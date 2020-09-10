@@ -1,5 +1,10 @@
 package dataCatcher;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -19,20 +24,45 @@ public class Main {
 		ArrayList<String> dates = chargerDates();
 		ArrayList<String> datesManquantes = new ArrayList<String>();
 		
-		
+		/*
 		for(HashMap.Entry<String, String> date : datesGoogle.entrySet()) {
 			System.out.println(date.getKey() + " " + date.getValue());
 		}
+		*/
+				
+		File fout = new File("morts_france.csv");
+		try {
+			FileOutputStream fos = new FileOutputStream(fout);
+	 
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+	 
+			try {
+				String ligne;
+				for(String date: dates) {
+					ligne = date + ",";
+					if(datesGoogle.containsKey(date)) {
+						ligne = ligne + datesGoogle.get(date);
+					}
+					else {
+						datesManquantes.add(date);
+						ligne = ligne + "0000";
+					}
+					System.out.println(ligne);
+					bw.write(ligne);
+					bw.newLine();
+				}
+				bw.close();
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+		catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
-		for(String date: dates) {
-			System.out.print(date + ",");
-			if(datesGoogle.containsKey(date)) {
-				System.out.println(datesGoogle.get(date));
-			}
-			else {
-				datesManquantes.add(date);
-				System.out.println("0000");
-			}
+		for(String dateManquante: datesManquantes) {
+			System.out.println(dateManquante);
 		}
 	}
 	public static String parseDate(String date) {
