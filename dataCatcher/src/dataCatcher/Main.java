@@ -22,8 +22,10 @@ public class Main {
 		System.out.println("Bonjour");
 		
 		HashMap<String, String> datesGoogle = chargerDatesGoogle();
+		HashMap<String, String> datesGoogleCas = chargerDatesGoogleCas(chaineCas);
 		ArrayList<String> datesSouhaitees = chargerDates();
-		ArrayList<String> datesManquantes = new ArrayList<String>();
+		ArrayList<String> datesMortsManquantes = new ArrayList<String>();
+		ArrayList<String> datesCasManquantes = new ArrayList<String>();
 		
 		/*
 		for(HashMap.Entry<String, String> date : datesGoogle.entrySet()) {
@@ -31,15 +33,12 @@ public class Main {
 		}
 		*/
 		
-		//ecrireFichier(datesGoogle, datesSouhaitees, datesManquantes);
+		//ecrireFichier("morts_france_15_09.csv", datesGoogle, datesSouhaitees, datesMortsManquantes);
+		ecrireFichier("cas_france_15_09.csv", datesGoogleCas, datesSouhaitees, datesCasManquantes);
+
 		
-		Document doc  = Jsoup.parseBodyFragment(chaineCas);
-		Elements lis = doc.body().children();
-		for(Element li : lis) {
-			System.out.println(li.ownText());
-		}
 	}
-	public static void garnirTableDates(Elements lis, HashMap<String, String> datesMortsGoogle) {
+	public static void lisEnTable(Elements lis, HashMap<String, String> tableDates) {
 		String text;
 		for( Element li: lis) {
 			text = parseDate(li.ownText());
@@ -51,13 +50,13 @@ public class Main {
 			if(date.length() < 8) {
 				date = "0" + date;
 			}
-			datesMortsGoogle.put(date, num);
+			tableDates.put(date, num);
 		}
 	}
-	public static void ecrireFichier(HashMap<String, String> datesGoogle,
+	public static void ecrireFichier(String nomFichier, HashMap<String, String> datesGoogle,
 			ArrayList<String> datesSouhaitees,
 			ArrayList<String> datesManquantes) {
-		File fout = new File("morts_france.csv");
+		File fout = new File(nomFichier);
 		try {
 			FileOutputStream fos = new FileOutputStream(fout);
  
@@ -124,8 +123,17 @@ public class Main {
 	public static void testit() {
 
 	}
+	public static HashMap<String, String> chargerDatesGoogleCas(String chaineCas) {
+		Document doc  = Jsoup.parseBodyFragment(chaineCas);
+		Elements lis = doc.body().children();
+		HashMap<String, String> dates = new HashMap<String, String>(); 
+		
+		lisEnTable(lis, dates);
+		
+		return dates;
+	}
 	public static HashMap<String, String> chargerDatesGoogle() {
-		HashMap<String, String> datesMortsGoogle = new HashMap<String, String>(); 
+		HashMap<String, String> dates = new HashMap<String, String>(); 
 		Document doc;
 		Element ol;
 		Elements lis;
@@ -134,13 +142,13 @@ public class Main {
 			ol = doc.select("div.ruktOc ol").first();
 			lis = ol.children();
 			
-			garnirTableDates(lis, datesMortsGoogle);
+			lisEnTable(lis, dates);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return datesMortsGoogle;
+		return dates;
 	}
 }
