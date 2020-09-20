@@ -103,10 +103,16 @@ if __name__ == '__main__':
     abscisses = list(range(len(nombres_morts)))
     
     #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas, abscisses, correlations)
-    plt.plot(abscisses, nombres_morts, abscisses, nombres_cas)
+    #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas, linewidth=0.5)
 
     debut, fin = 0, -1
-    #plt.plot(nombres_cas[debut:fin], nombres_morts[debut:fin], '+')
+    marqueurs = len(nombres_cas) * ['+']
+    couleurs = ['red', 'blue', 'green', 'pink', 'cyan', 'yellow', 'gray', 'black']
+    c = [couleurs[int(date[2:4]) - 2] for date in dates_morts[:-1]]
+
+    print(c)
+    
+    plt.scatter(nombres_cas[debut:fin], nombres_morts[debut:fin], marker='o', c=c, linewidth=0.5)
     
     #ax = plt.gca()
     #ax.axes.xaxis.set_ticklabels([])
