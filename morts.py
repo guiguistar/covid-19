@@ -115,10 +115,10 @@ def graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas):
 
     axes[0].set_title('Nombre de cas et nombre de morts en fonction du temps')
     axes[0].set_xlabel('Temps (jours)')
-    axes[0].plot(abscisses, nombres_morts, label='Nombre de morts', c='orange', linewidth=0.5)
-    axes[0].plot(abscisses, nombres_morts_lisses, label='Nombre de morts', c='orange', linewidth=1)
-    axes[0].plot(abscisses, nombres_cas, label='Nombre de cas', c='blue', linewidth=0.56)
-    axes[0].plot(abscisses, nombres_cas_lisses, label='Nombre de cas', c='blue', linewidth=1)
+    axes[0].plot(abscisses, nombres_morts, label='Nombre de morts brut', c='orange', linewidth=0.5)
+    axes[0].plot(abscisses, nombres_morts_lisses, label='Nombre de morts lissé', c='orange', linewidth=1)
+    axes[0].plot(abscisses, nombres_cas, label='Nombre de cas brut', c='blue', linewidth=0.56)
+    axes[0].plot(abscisses, nombres_cas_lisses, label='Nombre de cas lissé', c='blue', linewidth=1)
 
     axes[0].legend()
     
@@ -132,7 +132,7 @@ def graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas):
         print(lb, len(lb))
         print(lc, len(lc))
 
-        axes[1].scatter(lc, lb, marker='+', label=mois_[i+1], linewidth=0.5)
+        axes[1].scatter(lc, lb, marker='+', label=mois_[i+1], linewidth=1)
 
     
     axes[1].legend(ncol=2)
