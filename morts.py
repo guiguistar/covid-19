@@ -63,12 +63,10 @@ def moyennes_glissantes(X, largeur=30):
     moyennes = []
 
     for i in range(len(X)):
-        if i < len(X) - largeur:
-            M = np.mean(X[i:i+largeur])
-            moyennes.append(M)
-        else:
-            moyennes.append(0)
-
+        iFin = min(i + largeur, len(X))
+        M = np.mean(X[i:iFin])
+        moyennes.append(M)
+        
     return moyennes
     
 
@@ -105,10 +103,10 @@ if __name__ == '__main__':
     abscisses = list(range(len(nombres_morts)))
     
     #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas, abscisses, correlations)
-    #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas)
+    plt.plot(abscisses, nombres_morts, abscisses, nombres_cas)
 
     debut, fin = 0, -1
-    plt.plot(nombres_cas[debut:fin], nombres_morts[debut:fin], '+')
+    #plt.plot(nombres_cas[debut:fin], nombres_morts[debut:fin], '+')
     
     #ax = plt.gca()
     #ax.axes.xaxis.set_ticklabels([])
