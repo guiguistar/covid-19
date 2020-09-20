@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 from datetime import datetime
 
@@ -72,8 +73,14 @@ def moyennes_glissantes(X, largeur=30):
     
 
 if __name__ == '__main__':
-    dates_morts, nombres_morts  = lire_fichier('dataCatcher/morts_france_15_09.csv')
-    dates_cas, nombres_cas  = lire_fichier('dataCatcher/cas_france_15_09.csv')
+    if not len(sys.argv) == 3:
+        print('Le script a besoin de deux paramètres correspondant aux deux fichiers.')
+        sys.exit()
+
+    _, nomFichierMorts, nomFichierCas = sys.argv
+        
+    dates_morts, nombres_morts  = lire_fichier(nomFichierMorts)
+    dates_cas, nombres_cas  = lire_fichier(nomFichierCas)
     
     print(nombres_morts)
     print(nombres_cas)
@@ -100,7 +107,7 @@ if __name__ == '__main__':
     #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas, abscisses, correlations)
     #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas)
 
-    debut, fin = 0, 60
+    debut, fin = 0, -1
     plt.plot(nombres_cas[debut:fin], nombres_morts[debut:fin], '+')
     
     #ax = plt.gca()
