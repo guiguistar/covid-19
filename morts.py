@@ -62,10 +62,11 @@ def coeff_corr_glissant(X, Y, multiplicateur=1, largeur=30):
 
 def moyennes_glissantes(X, largeur=30):
     moyennes = []
-
+ 
     for i in range(len(X)):
-        iFin = min(i + largeur, len(X))
-        M = np.mean(X[i:iFin])
+        iDeb = max(i - largeur // 2, 0)
+        iFin = min(i + (largeur - largeur // 2), len(X))
+        M = np.mean(X[iDeb:iFin])
         moyennes.append(M)
         
     return moyennes    
@@ -86,8 +87,8 @@ def graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas):
     nombres_morts = list(map(int,nombres_morts))
     nombres_cas = list(map(lambda x: 1 * int(x), nombres_cas))
 
-    nombres_morts = moyennes_glissantes(nombres_morts, largeur=20)
-    nombres_cas = moyennes_glissantes(nombres_cas, largeur=20)
+    nombres_morts_lisses = moyennes_glissantes(nombres_morts, largeur=20)
+    nombres_cas_lisses = moyennes_glissantes(nombres_cas, largeur=20)
     
     abscisses = list(range(len(nombres_morts)))
 
@@ -114,8 +115,10 @@ def graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas):
 
     axes[0].set_title('Nombre de cas et nombre de morts en fonction du temps')
     axes[0].set_xlabel('Temps (jours)')
-    axes[0].plot(abscisses, nombres_morts, label='Nombre de morts', linewidth=0.5)
-    axes[0].plot(abscisses, nombres_cas, label='Nombre de cas', linewidth=0.5)
+    axes[0].plot(abscisses, nombres_morts, label='Nombre de morts', c='orange', linewidth=0.5)
+    axes[0].plot(abscisses, nombres_morts_lisses, label='Nombre de morts', c='orange', linewidth=1)
+    axes[0].plot(abscisses, nombres_cas, label='Nombre de cas', c='blue', linewidth=0.56)
+    axes[0].plot(abscisses, nombres_cas_lisses, label='Nombre de cas', c='blue', linewidth=1)
 
     axes[0].legend()
     
