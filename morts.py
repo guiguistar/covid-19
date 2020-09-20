@@ -67,12 +67,9 @@ def moyennes_glissantes(X, largeur=30):
         M = np.mean(X[i:iFin])
         moyennes.append(M)
         
-    return moyennes
-    
-def graphiques_(nomFichierMorts, nomFichierCas):
-    dates_morts, nombres_morts  = lire_fichier(nomFichierMorts)
-    dates_cas, nombres_cas  = lire_fichier(nomFichierCas)
-    
+    return moyennes    
+
+def graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas):
     print(nombres_morts)
     print(nombres_cas)
 
@@ -94,23 +91,18 @@ def graphiques_(nomFichierMorts, nomFichierCas):
     correlations = coeff_corr_glissant(nombres_morts, nombres_cas, multiplicateur=3000, largeur=40)
     
     abscisses = list(range(len(nombres_morts)))
-    
-    #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas, abscisses, correlations)
-    #plt.plot(abscisses, nombres_morts, abscisses, nombres_cas, linewidth=0.5)
 
     debut, fin = 0, -1
     marqueurs = len(nombres_cas) * ['+']
     couleurs = ['red', 'blue', 'green', 'pink', 'cyan', 'yellow', 'gray', 'black']
     c = [couleurs[int(date[2:4]) - 2] for date in dates_morts[:-1]]
 
-    plt.scatter(nombres_cas[debut:fin], nombres_morts[debut:fin], marker='+', c=c, linewidth=0.5)
-    
-    #ax = plt.gca()
-    #ax.axes.xaxis.set_ticklabels([])
+    figure, axes = plt.subplots(2)
+    axes[0].plot(abscisses, nombres_morts, abscisses, nombres_cas, linewidth=0.5)
+    axes[1].scatter(nombres_cas[debut:fin], nombres_morts[debut:fin], marker='+', c=c, linewidth=0.5)
 
     plt.show()
-
-
+    
 if __name__ == '__main__':
     if not len(sys.argv) == 3:
         print('Le script a besoin de deux paramètres correspondant aux deux fichiers.')
@@ -118,4 +110,7 @@ if __name__ == '__main__':
 
     _, nomFichierMorts, nomFichierCas = sys.argv
         
-    graphiques_(nomFichierMorts, nomFichierCas)
+    dates_morts, nombres_morts  = lire_fichier(nomFichierMorts)
+    dates_cas, nombres_cas  = lire_fichier(nomFichierCas)
+    
+    graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas)
