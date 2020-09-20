@@ -8,6 +8,7 @@ from datetime import datetime
 
 jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+mois_ = ['Jan.', 'Fév.', 'Mars', 'Avr.', 'Mai', 'Juin', 'juil.', 'Août', 'Sep.', 'Oct.', 'Nov.', 'Déc.']
 
 def format_date(DDMMYYYY):
     #print(f"=====>> '{DDMMYYYY}'")
@@ -88,19 +89,56 @@ def graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas):
     nombres_morts = moyennes_glissantes(nombres_morts, largeur=20)
     nombres_cas = moyennes_glissantes(nombres_cas, largeur=20)
     
-    correlations = coeff_corr_glissant(nombres_morts, nombres_cas, multiplicateur=3000, largeur=40)
-    
     abscisses = list(range(len(nombres_morts)))
 
     debut, fin = 0, -1
     marqueurs = len(nombres_cas) * ['+']
     couleurs = ['red', 'blue', 'green', 'pink', 'cyan', 'yellow', 'gray', 'black']
-    c = [couleurs[int(date[2:4]) - 2] for date in dates_morts[:-1]]
 
+    f = lambda date: int(date[2:4]) - 2
+    
+    c = [couleurs[f(date)] for date in dates_morts[:-1]]
+
+    res = list(zip(dates_morts, nombres_morts, nombres_cas))
+            
+    filtre = []
+    for i in range(8):
+        liste = list(filter(lambda x: f(x[0]) == i, res))
+        filtre.append(liste)
+
+    #print(*filtre, sep='\n')
+        
     figure, axes = plt.subplots(2)
-    axes[0].plot(abscisses, nombres_morts, abscisses, nombres_cas, linewidth=0.5)
-    axes[1].scatter(nombres_cas[debut:fin], nombres_morts[debut:fin], marker='+', c=c, linewidth=0.5)
 
+    figure.canvas.set_window_title('Covid-19')
+
+    axes[0].set_title('Nombre de cas et nombre de morts en fonction du temps')
+    axes[0].set_xlabel('Temps (jours)')
+    axes[0].plot(abscisses, nombres_morts, label='Nombre de morts', linewidth=0.5)
+    axes[0].plot(abscisses, nombres_cas, label='Nombre de cas', linewidth=0.5)
+
+    axes[0].legend()
+    
+    for i in range(8):
+        la, lb, lc = [], [], []
+        for A, B, C in filtre[i]:
+            la.append(A)
+            lb.append(B)
+            lc.append(C)
+        print(la, len(la))
+        print(lb, len(lb))
+        print(lc, len(lc))
+
+        axes[1].scatter(lc, lb, marker='+', label=mois_[i+1], linewidth=0.5)
+
+    
+    axes[1].legend(ncol=2)
+    axes[1].set_title('Corrélation nombre de cas / nombre de morts')
+    axes[1].set_xlabel('Nombre de cas')
+    axes[1].set_ylabel('Nombre de morts')
+    #axes[1].scatter(nombres_cas[debut:fin], nombres_morts[debut:fin], marker='+', c=c, linewidth=0.5)
+
+    plt.tight_layout()
     plt.show()
     
 if __name__ == '__main__':
