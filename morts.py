@@ -100,7 +100,7 @@ def graphiques(dates_morts, nombres_morts, dates_cas, nombres_cas):
     
     c = [couleurs[f(date)] for date in dates_morts[:-1]]
 
-    res = list(zip(dates_morts, nombres_morts, nombres_cas))
+    res = list(zip(dates_morts, nombres_morts_lisses, nombres_cas_lisses))
             
     filtre = []
     for i in range(8):
