@@ -69,14 +69,7 @@ def moyennes_glissantes(X, largeur=30):
         
     return moyennes
     
-
-if __name__ == '__main__':
-    if not len(sys.argv) == 3:
-        print('Le script a besoin de deux paramètres correspondant aux deux fichiers.')
-        sys.exit()
-
-    _, nomFichierMorts, nomFichierCas = sys.argv
-        
+def graphiques_(nomFichierMorts, nomFichierCas):
     dates_morts, nombres_morts  = lire_fichier(nomFichierMorts)
     dates_cas, nombres_cas  = lire_fichier(nomFichierCas)
     
@@ -110,11 +103,19 @@ if __name__ == '__main__':
     couleurs = ['red', 'blue', 'green', 'pink', 'cyan', 'yellow', 'gray', 'black']
     c = [couleurs[int(date[2:4]) - 2] for date in dates_morts[:-1]]
 
-    print(c)
-    
-    plt.scatter(nombres_cas[debut:fin], nombres_morts[debut:fin], marker='o', c=c, linewidth=0.5)
+    plt.scatter(nombres_cas[debut:fin], nombres_morts[debut:fin], marker='+', c=c, linewidth=0.5)
     
     #ax = plt.gca()
     #ax.axes.xaxis.set_ticklabels([])
 
     plt.show()
+
+
+if __name__ == '__main__':
+    if not len(sys.argv) == 3:
+        print('Le script a besoin de deux paramètres correspondant aux deux fichiers.')
+        sys.exit()
+
+    _, nomFichierMorts, nomFichierCas = sys.argv
+        
+    graphiques_(nomFichierMorts, nomFichierCas)
